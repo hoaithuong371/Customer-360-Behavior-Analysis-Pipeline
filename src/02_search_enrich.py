@@ -14,15 +14,11 @@ import pandas as pd
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
-# =============================================================================
-# 1. CẤU HÌNH ĐƯỜNG DẪN (PATHS CONFIGURATION)
-# =============================================================================
 BASE_DIR = "/Users/hoaithuong/Desktop/Customer-Behavior-Analysis-Pipeline"
 CHECKPOINT_DIR = f"{BASE_DIR}/data/checkpoints"
 MANUAL_FILE = f"{BASE_DIR}/data/mapping/Tu_Khoa_Da_Map_Tay.xlsx"
 PROCESSED_DIR = f"{BASE_DIR}/data/processed"
 
-# Tên file đầu ra
 FINAL_PARQUET = f"{PROCESSED_DIR}/Master_Table_Log_Search.parquet"
 EXCEL_REPORT = f"{PROCESSED_DIR}/Bao_Cao_Chuyen_Dich_Thang_6_7.xlsx"
 
@@ -139,7 +135,7 @@ def main():
         print(f"Đang lưu Master Table tại: {FINAL_PARQUET}")
         df_final_enriched.write.mode("overwrite").parquet(FINAL_PARQUET)
 
-        print("🎉 TẤT CẢ PIPELINE ĐÃ HOÀN TẤT THÀNH CÔNG!")
+        print("PIPELINE ĐÃ HOÀN TẤT THÀNH CÔNG!")
         df_final_enriched.select("user_id", "category_t6", "category_t7", "user_status", "trending_types").show(10)
 
     except Exception as e:
