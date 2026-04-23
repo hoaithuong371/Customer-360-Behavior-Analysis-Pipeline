@@ -19,9 +19,6 @@ from pyspark.sql.types import StructType, StructField, StringType, LongType
 # Khởi tạo findspark (Dành cho môi trường local)
 findspark.init()
 
-# =============================================================================
-# 1. CẤU HÌNH ĐƯỜNG DẪN & HẰNG SỐ
-# =============================================================================
 BASE_DIR = "/Users/hoaithuong/Desktop/Customer-Behavior-Analysis-Pipeline"
 RAW_CONTENT_PATH = "/Users/hoaithuong/Desktop/DE CLASS/Dataset/log_content"
 OUTPUT_PATH = f"{BASE_DIR}/data/processed/Master_Content_Enriched.parquet"
@@ -38,9 +35,7 @@ CONTENT_SCHEMA = StructType([
 ])
 
 def main():
-    print("=== KHỞI ĐỘNG PIPELINE 3: CONTENT ETL ===")
-    
-    # Khởi tạo Spark
+    print("PIPELINE 3: CONTENT ETL ===")
     spark = SparkSession.builder \
         .appName("ETL_Content_Pipeline") \
         .config("spark.driver.memory", "4g") \
@@ -83,17 +78,17 @@ def main():
         # --- BƯỚC 4: TÍNH TOÁN KPI (ACTIVE RATIO, MOST WATCH, TASTE) ---
         print(">>> Đang tính toán KPIs...")
         
-        # 4.1. Tính Active Ratio
+        # Tính Active Ratio
         df_active = df_clean.select("user_id", "Date").dropDuplicates() \
             .groupBy("user_id").agg(
                 F.round((F.count("Date") / TOTAL_DAYS_IN_MONTH)*100, 2).alias("Active")
             )
 
-        # 4.2. Pivot Duration
+        # Pivot Duration
         categories = ["Truyền Hình", "Phim Truyện", "Giải Trí", "Thiếu Nhi", "Thể Thao"]
         df_pivot = df_clean.groupBy("user_id").pivot("Type", categories).sum("TotalDuration").fillna(0)
 
-        # 4.3. Tìm MostWatch & Taste
+        # Tìm MostWatch & Taste
         df_result = df_pivot.withColumn("max_val", F.greatest(*[F.col(c) for c in categories]))
         
         most_watch_expr = F.when(F.col("max_val") == 0, "None")
@@ -105,7 +100,7 @@ def main():
                             .join(df_active, on="user_id", how="inner") \
                             .drop("max_val")
 
-        # 4.4. Đổi tên cột chuẩn mực
+        #  Đổi tên cột chuẩn mực
         for cat in categories:
             final_df = final_df.withColumnRenamed(cat, "Total_" + cat.replace(" ", "_"))
 
@@ -118,7 +113,7 @@ def main():
         os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
         final_df_sample.write.mode("overwrite").parquet(OUTPUT_PATH)
         
-        print("✅ PIPELINE 3 HOÀN TẤT THÀNH CÔNG!")
+        print("PIPELINE 3 HOÀN TẤT THÀNH CÔNG!")
 
     except Exception as e:
         print(f"❌ Pipeline thất bại do lỗi: {str(e)}")
