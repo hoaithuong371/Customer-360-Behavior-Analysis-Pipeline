@@ -72,4 +72,6 @@ Based on the 5,000+ user cohort analyzed across June and July, several critical 
    ```bash
    python3 src/04_final_merge_and_load.py
 
-Author: [Thuong Hoai Le] - Data Engineer Fresher
+---
+**Author:** Thuong Hoai Le - Data Engineer Fresher
+* 📧 Email: hoaithuongr277@gmail.com
