@@ -3,6 +3,7 @@
 data/checkpoints/*
 data/processed/*
 data/mapping/*
+notebooks/*
 
 note.txt
 
