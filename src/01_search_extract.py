@@ -14,18 +14,11 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
 
-# =============================================================================
-# 1. CẤU HÌNH HỆ THỐNG 
-# =============================================================================
-
-# TODO: Đổi đường dẫn này thành biến môi trường khi đưa lên Production (VD: s3://bucket-name/...)
 BASE_PATH = "/Users/hoaithuong/Desktop/DE CLASS/Dataset/log_search"
 CHECKPOINT_DIR = "data/checkpoints"
 EXPORT_MANUAL_FILE = "data/mapping/Tu_Khoa_Can_Map_Tay.xlsx"
 
-# =============================================================================
-# 2. TỪ ĐIỂN REGEX (RULE ENGINE)
-# =============================================================================
+# RULE ENGINE
 REGEX_RULES = {
     "System": r"(?i)\b(dang nhap|mat khau|app|vip|nap tien|dang ky|tik tok|youtube|ezviz|xmeye|tim kiem|cach|youtobe|you tube|fpt|zalo|facebook|google|tai|huong dan|hack|loi|cai dat|tai khoan)\b",
     "Sports": r"(?i)\b(bong da|cup|u19|u23|ngoai hang|ban ket|chung ket|truc tiep|the thao|world cup|man utd|mu|ronaldo|messi|liverpool|tran dau|fc|da bong|bong chuyen|cakhia|vebo|xoilac|mitom|tennis|nba|bong ro|ca long|cau long|bida|billiard|highlight)\b",
@@ -45,9 +38,8 @@ REGEX_RULES = {
     "Movies_General": r"(?i)\b(phim|phim bo|phim le|phim chieu rap|phim hay|xem phim|phim moi|thuyet minh|long tieng|vietsub|tron bo|tap \d+)\b"
 }
 
-# =============================================================================
-# 3. CÁC HÀM XỬ LÝ DỮ LIỆU (PROCESSING FUNCTIONS)
-# =============================================================================
+# PROCESSING FUNCTIONS
+
 def get_spark_session():
     """Khởi tạo và trả về Spark Session"""
     return SparkSession.builder \
@@ -186,9 +178,6 @@ def export_manual_mapping_file(df_need_manual, export_path):
     pdf_need_manual = pdf_need_manual[["Keyword_Gốc", "Trưởng_Họ_(Family)", "category"]]
     pdf_need_manual.to_excel(export_path, index=False, engine='openpyxl')
 
-# =============================================================================
-# 4. LUỒNG THỰC THI CHÍNH (MAIN PIPELINE)
-# =============================================================================
 def main():
     print("=== KHỞI ĐỘNG PIPELINE 1: EXTRACT & AUTO MAP ===")
     spark = get_spark_session()
@@ -235,8 +224,5 @@ def main():
     finally:
         spark.stop()
 
-# =============================================================================
-# ĐIỂM KÍCH HOẠT CHƯƠNG TRÌNH (ENTRY POINT)
-# =============================================================================
 if __name__ == "__main__":
     main()
