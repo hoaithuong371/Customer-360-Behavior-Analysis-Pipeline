@@ -11,6 +11,9 @@ This project is an End-to-End Data Engineering & Analytics solution designed for
 🔗 **[Click here to view the Interactive Tableau Dashboard](https://public.tableau.com/views/Customer360BehaviorContentStrategyAnalysis/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)**
 
 ## 🏗️ Data Architecture (Medallion Concept)
+
+![Data Architecture Diagram](docs/images/Data%20Architecture.png)
+
 The pipeline strictly follows the Medallion Architecture to ensure data quality and scalability:
 
 1. **🥉 Bronze Layer (Raw Data):** Ingestion of unstructured/semi-structured `log_search` (Parquet) and `log_content` (JSON) containing timestamps, raw queries, and durations.
@@ -38,15 +41,15 @@ Based on the 5,000+ user cohort analyzed across June and July, several critical 
 
 ### 1. Customer 360 Overview
 *Comparing Search Intent vs. Actual Watch Distribution.*
-![Dashboard 1](dashboards/Dashboard_1.jpg)
+![Dashboard 1](docs/images/Dashboard%201.png)
 
 ### 2. Content Strategy & Shift Behavior
 *Analyzing category stickiness and Top 10 transition flows.*
-![Dashboard 2](dashboards/Dashboard_2.jpg)
+![Dashboard 2](docs/images/Dashboard%202.png)
 
 ### 3. User Profiling
 *Deep dive into user archetypes and engagement levels.*
-![Dashboard 3](dashboards/Dashboard_3.jpg)
+![Dashboard 3](docs/images/Dashboard%203.png)
 
 ## 💻 Tech Stack & Pipeline Execution
 
@@ -58,3 +61,15 @@ Based on the 5,000+ user cohort analyzed across June and July, several critical 
 1. **Initialize Database:** Run the schema script to create the Datamart structure.
    ```bash
    mysql -u root -p < sql/init_schema.sql
+
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+
+3. **Setup Environment:** Copy the .env.example file to .env and configure your local MySQL credentials.
+
+4. **Execute ETL Pipeline:** Run the final PySpark job to merge and load data.
+   ```bash
+   python3 src/04_final_merge_and_load.py
+
+Author: [Thuong Hoai Le] - Data Engineer Fresher
