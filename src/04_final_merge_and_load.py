@@ -42,29 +42,19 @@ def main():
 
         print(">>> [2/3] Đang thực hiện Join dữ liệu theo row_idx...")
         
-        # -------------------------------------------------------------------
-        # LOGIC GHI ĐÈ: Join theo thứ tự dòng (row_idx)
-        # -------------------------------------------------------------------
-        # 1. Tạo một "khung" để đếm số thứ tự dòng
+        # GHI ĐÈ: Join theo thứ tự dòng (row_idx)
         windowSpec = Window.orderBy(F.monotonically_increasing_id())
-
-        # 2. Đánh số thứ tự dòng cho từng bảng
         df_search_with_idx = df_search.withColumn("row_idx", F.row_number().over(windowSpec))
-        
-        # Kiểm tra xem df_content có cột user_id không để drop, tránh lỗi trùng cột
         if "user_id" in df_content.columns:
             df_content_with_idx = df_content.drop("user_id").withColumn("row_idx", F.row_number().over(windowSpec))
         else:
             df_content_with_idx = df_content.withColumn("row_idx", F.row_number().over(windowSpec))
-
-        # 3. Join 2 bảng dựa trên cột 'row_idx', sau đó xóa cột này
         df_360 = df_search_with_idx.join(df_content_with_idx, on="row_idx", how="inner") \
                                    .drop("row_idx")
-        
-        # Cache lại data 
+
         df_360.cache()
         
-        print(f">>> HOÀN TẤT! TỔNG SỐ KHÁCH HÀNG 360 ĐỘ (INNER JOIN): {df_360.count()}")
+        print(f">>> HOÀN TẤT! TỔNG SỐ KHÁCH HÀNG 360: {df_360.count()}")
         print(">>> Xem thử 10 dòng tiêu biểu:")
         df_360.show(10, truncate=False)
 
