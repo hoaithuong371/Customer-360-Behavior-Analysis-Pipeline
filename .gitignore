@@ -1,0 +1,17 @@
+.env
+
+data/checkpoints/*
+data/processed/*
+data/mapping/*
+
+note.txt
+
+data/raw/*
+!data/raw/sample_search.parquet
+!data/raw/sample_content.json
+
+venv/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store

@@ -1,0 +1,32 @@
+Customer-Behavior-Analysis-Pipeline/
+│
+├── .env.example                # 🟢 [LÊN GIT] File mẫu để trống mật khẩu cho người khác xem
+├── .gitignore                  # 🟢 [LÊN GIT] "Bảo vệ" chặn không cho up dữ liệu và mật khẩu
+├── README.md                   # 🟢 [LÊN GIT] Báo cáo dự án & Hướng dẫn cách chạy code
+├── requirements.txt            # 🟢 [LÊN GIT] Danh sách thư viện cần cài (pyspark, pandas...)
+│
+├── .env                        # 🔴 [BỊ ẨN] Chứa mật khẩu thật (Tuyệt đối chỉ để ở máy bạn)
+│
+├── data/                       # 🔴 [BỊ ẨN TOÀN BỘ, TRỪ 2 FILE MẪU]
+│   ├── raw/
+│   │   ├── sample_search.parquet  # 🟢 [LÊN GIT] Dữ liệu mẫu thu nhỏ để test code
+│   │   └── sample_content.json    # 🟢 [LÊN GIT] Dữ liệu mẫu thu nhỏ để test code
+│   ├── checkpoints/            # 🔴 [BỊ ẨN] File trung gian của Spark
+│   ├── mapping/                # 🔴 [BỊ ẨN] File Excel xử lý tay (nghiệp vụ nội bộ)
+│   └── processed/              # 🔴 [BỊ ẨN] Bảng Master và file Excel xuất ra cho Tableau
+│
+├── docs/                       # 🟢 [LÊN GIT] Thư mục tài liệu
+│   ├── data_dictionary.md      # Giải thích các công thức tính toán và logic nghiệp vụ
+│   └── images/                 # Ảnh để nhúng vào file README
+│       ├── architecture_diagram.png 
+│       └── dashboard_overview.png
+│
+├── sql/                        # 🟢 [LÊN GIT] Thư mục chứa code Database
+│   ├── init_schema.sql         # Code tạo bảng (CREATE TABLE)
+│   └── business_insights.sql   # Code truy vấn phân tích (Top VIP, Trend...)
+│
+└── src/                        # 🟢 [LÊN GIT] Thư mục chứa code ETL (Đã bỏ thư mục config)
+    ├── 01_search_extract.py    
+    ├── 02_search_enrich.py     
+    ├── 03_content_etl.py       
+    └── 04_final_merge_and_load.py # File code gom dữ liệu mà chúng ta vừa hoàn thiện
